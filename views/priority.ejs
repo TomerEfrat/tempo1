@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title> <%= priority %> - מערכת תגים</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    
+        <div class=" text-box">
+            <h1>תגים <%= priority %></h1>
+            <div class="row_p">
+                <button class="col_p" onclick="window.location.href='/add/<%= priority %>'">הוספת תג חדש</button>
+                <button class="col_p" onclick="window.location.href='/track/<%= priority %>'">מעקב תגים</button>
+            </div>
+            <button class="button" onclick="window.history.back()">חזרה</button>
+        </div>
+    
+</body>
+</html>

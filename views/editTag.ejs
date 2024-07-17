@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>עריכת תג</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>תיאור התג</h1>
+        <form action="/edit/<%= tag._id %>" method="POST" enctype="multipart/form-data">
+            <div>
+                <label for="employeeName">שם העובד:</label>
+                <span><%= tag.employeeName %></span>
+            </div>
+            <div>
+                <label for="equipment">ציוד עם חריגה:</label>
+                <span><%= tag.equipment %></span>
+            </div>
+            <div>
+                <label for="description">תיאור חריגה בקצרה:</label>
+                <span><%= tag.description %></span>
+            </div>
+            <div>
+                <label for="image">העלאת תמונה של החריגה:</label>
+                <% if (tag.imageUrl) { %>
+                <img src="/<%= tag.imageUrl %>" alt="Uploaded Image" style="max-width: 100%; max-height: 300px;">
+                <% } else { %>
+                <span>No image uploaded</span>
+                <% } %>
+            </div>
+            
+            <h2>פעולות מתקנות</h2>
+            <div>
+                <label for="treatmentEmployeeName">שם הגורם המטפל:</label>
+                <input type="text" id="treatmentEmployeeName" name="employeeName" value="<%= tag.treatmentDetails.employeeName %>">
+            </div>
+            <div>
+                <label for="position">תפקיד העובד:</label>
+                <select id="position" name="position">
+                    <option value="electrician" <%= tag.treatmentDetails.position === 'electrician' ? 'selected' : '' %>>חשמלאי</option>
+                    <option value="technician" <%= tag.treatmentDetails.position === 'technician' ? 'selected' : '' %>>טכנאי</option>
+                    <!-- Add more options as needed -->
+                </select>
+            </div>
+            <div>
+                <label for="duration">משך התיקון:</label>
+                <input type="text" id="duration" name="duration" value="<%= tag.treatmentDetails.duration %>">
+            </div>
+            <div>
+                <label for="actionsPerformed">פעולות שבוצעו:</label>
+                <textarea id="actionsPerformed" name="actionsPerformed"><%= tag.treatmentDetails.actionsPerformed %></textarea>
+            </div>
+            <div>
+                <label for="newProcedures">נהלים שיש לעדכן:</label>
+                <textarea id="newProcedures" name="newProcedures"><%= tag.treatmentDetails.newProcedures %></textarea>
+            </div>
+            <button class="button" type="submit">שמירה</button>
+        </form>
+        <button class="button" onclick="window.history.back()">חזרה</button>
+    </div>
+</body>
+</html>

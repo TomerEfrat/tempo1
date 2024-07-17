@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>הוספת תג</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>הוספ תג - <%= priority %></h1>
+        <form action="/add/<%= priority %>" method="POST" enctype="multipart/form-data">
+            <div>
+                <label for="employeeName">שם העובד :</label>
+                <select id="employeeName" name="employeeName">
+                    <option value="employee1">עובד 1</option>
+                    <option value="employee2">עובד 2</option>
+                    <option value="employee3">עובד 3</option>
+                    <!-- Add more options as needed -->
+                </select>
+            </div>
+            <div>
+                <label for="equipment">ציוד:</label>
+                <select id="equipment" name="equipment">
+                    <option value="equipment1">Equipment 1</option>
+                    <option value="equipment2">Equipment 2</option>
+                    <option value="equipment3">Equipment 3</option>
+                    <!-- Add more options as needed -->
+                </select>
+            </div>
+            <div>
+                <label for="image">העלאת תמונה של החריגה:</label>
+                <input type="file" id="image" name="image" onchange="previewImage(event)">
+            </div>
+            <div id="imagePreview"></div>
+            <div>
+                <label for="description">תיאור החריגה בקצרה:</label>
+                <textarea id="description" name="description"></textarea>
+            </div>
+            <button type="submit">הוספת תג</button>
+        </form>
+        <button Class="button"  onclick="window.history.back()">חזרה</button>
+    </div>
+    <script>
+        function previewImage(event) {
+            const imagePreview = document.getElementById('imagePreview');
+            imagePreview.innerHTML = '';
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.style.maxWidth = '100%';
+                    img.style.maxHeight = '300px'; // Adjust as needed
+                    imagePreview.appendChild(img);
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
+
+
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl"">
+<head>
+    <meta charset="UTF-8">
+    <title>מעקב תגים  <%= priority %></title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>מעקב תגים <%= priority %></h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>תאריך הוספת תג</th>
+                    <th>תיאור החריגה</th>
+                    <th>צפייה</th>
+                    <th>תחילת טיפול</th>
+                    <th>סיום טיפול</th>
+                    <th>מחיקת תג</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% tags.forEach(tag => { %>
+                    <tr>
+                        <td><%= tag.createdAt.toLocaleString() %></td>
+                        <td><%= tag.description %></td>
+                        <td><button onclick="window.location.href='/edit/<%= tag._id %>'">צפייה\עריכה</button></td>
+                        <td>
+                            <input type="checkbox" onchange="updateTreatmentStart('<%= tag._id %>', this.checked)" <%= tag.treatmentStartDate ? 'checked' : '' %>>
+                            <span id="start-date-<%= tag._id %>"><%= tag.treatmentStartDate ? tag.treatmentStartDate.toLocaleString() : '' %></span>
+                        </td>
+                        <td>
+                            <input type="checkbox" onchange="updateTreatmentEnd('<%= tag._id %>', this.checked)" <%= tag.treatmentEndDate ? 'checked' : '' %>>
+                            <span id="end-date-<%= tag._id %>"><%= tag.treatmentEndDate ? tag.treatmentEndDate.toLocaleString() : '' %></span>
+                        </td>
+                        <td><button onclick="deleteTag('<%= tag._id %>')">מחיקה</button></td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+        <button class="button" onclick="window.history.back()">חזרה</button>
+    </div>
+
+    <script>
+        function updateTreatmentStart(tagId, checked) {
+            fetch(`/update-treatment-start/${tagId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ startDate: checked ? new Date() : null })
+            }).then(() => {
+                document.getElementById(`start-date-${tagId}`).innerText = checked ? new Date().toLocaleString() : '';
+            }).catch(err => {
+                console.error('Error updating treatment start date:', err);
+            });
+        }
+    
+        function updateTreatmentEnd(tagId, checked) {
+            fetch(`/update-treatment-end/${tagId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ endDate: checked ? new Date() : null })
+            }).then(() => {
+                document.getElementById(`end-date-${tagId}`).innerText = checked ? new Date().toLocaleString() : '';
+            }).catch(err => {
+                console.error('Error updating treatment end date:', err);
+            });
+        }
+    </script>
+    <script>
+        function deleteTag(tagId) {
+            if (confirm('Deleting a form will delete all the data in it, do you want to continue?')) {
+                fetch(`/delete/${tagId}`, {
+                    method: 'POST'
+                }).then(response => {
+                    if (response.ok) {
+                        window.location.reload();
+                    } else {
+                        alert('Failed to delete the tag. Please try again.');
+                    }
+                }).catch(err => {
+                    console.error('Error deleting tag:', err);
+                    alert('Error deleting tag. Please try again.');
+                });
+            }
+        }
+    </script>
+</body>
+</html>
